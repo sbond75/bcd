@@ -22,8 +22,8 @@
 with pkgs;
 
 let
-  my-python-packages = python3Full.withPackages(ps: with ps; [
-    distorm3 # disassembler for x86 (tool you can use)
+  my-python-packages = pythonFull.withPackages(ps: with ps; [
+    #distorm3 # disassembler for x86 (tool you can use)
   ]);
   my-hivex = (callPackage ./hivex.nix {});
 in mkShell {
@@ -50,6 +50,6 @@ in mkShell {
 
   # Hack to get hivex on the Python path for now
   shellHook = ''
-    export PYTHONPATH="$PYTHONPATH:${my-hivex.outPath}/${python3.sitePackages}"
+    export PYTHONPATH="$PYTHONPATH:${my-hivex.outPath}/${python.sitePackages}"
   '';
 }

@@ -1,7 +1,7 @@
 # https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/development/libraries/hivex/default.nix#L33
 
 { lib, stdenv, fetchurl, pkg-config, autoreconfHook, makeWrapper
-, perlPackages, libxml2, libiconv, python3 }:
+, perlPackages, libxml2, libiconv, python }:
 
 stdenv.mkDerivation rec {
   pname = "hivex";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
                       ];
   buildInputs = [
     libxml2
-    python3
+    python
   ]
   ++ (with perlPackages; [ perl IOStringy
                            #(callPackage ./podlators.nix {})
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   # This is not really possible I guess, (`output` is undefined) (based on https://discourse.nixos.org/t/how-to-package-a-rust-application-with-python-bindings/3250 and https://nixos.org/guides/nix-pills/our-first-derivation.html ) : `configureFlags = [ "--with-python-installdir=${outputs.out.path}/${python3.sitePackages}" ];`, so we are using this:
   preConfigure = ''
-    configureFlags="$configureFlags --with-python-installdir=$out/${python3.sitePackages}"
+    configureFlags="$configureFlags --with-python-installdir=$out/${python.sitePackages}"
   '';
   
   postInstall = ''

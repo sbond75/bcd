@@ -40,12 +40,16 @@ class BCDMyLinuxUpdater(object):
         self.__bcdmenu.commit()
 
     def print_info(self):
+        print(dir(self.__bcdmenu.bcd))
+        #self.__bcdmenu.bcd.print_tree(0)
+        
         print("BCD information:")
         print("Timeout: {0}".format(self.__bcdmenu.timeout))
         print("Active boot entries:")
         for element in self.__bcdmenu.bootentries:
             print("  {0}".format(element.description))
             print("    {0}".format(element.guid))
+            #print(element)
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -57,8 +61,8 @@ if __name__ == "__main__":
     mylinux = BCDMyLinuxUpdater(filename)
     print("Before changes:")
     mylinux.print_info()
-    print("")
+    #print("")
     #mylinux.update()
-    print("")
-    print("After changes:")
+    #print("")
+    #print("After changes:")
     #mylinux.print_info()
