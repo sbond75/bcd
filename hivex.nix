@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
                          ])
   ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
+  prePatch = ''
+    substituteInPlace lib/hivex-internal.h --replace "#define HIVEX_MAX_SUBKEYS       70000" "#define HIVEX_MAX_SUBKEYS       700000" --replace "#define HIVEX_MAX_VALUES       110000" "#define HIVEX_MAX_VALUES       1100000" # https://github.com/libguestfs/hivex/blob/master/lib/hivex-internal.h , https://listman.redhat.com/archives/libguestfs/2016-December/msg00008.html ; to prevent `returning ERANGE because: nr_subkeys_in_nk > HIVEX_MAX_SUBKEYS (139314 > 70000)` on a valid registry hive file.
+  '';
+  
   # This is not really possible I guess, (`output` is undefined) (based on https://discourse.nixos.org/t/how-to-package-a-rust-application-with-python-bindings/3250 and https://nixos.org/guides/nix-pills/our-first-derivation.html ) : `configureFlags = [ "--with-python-installdir=${outputs.out.path}/${python3.sitePackages}" ];`, so we are using this:
   preConfigure = ''
     configureFlags="$configureFlags --with-python-installdir=$out/${python3.sitePackages}"
